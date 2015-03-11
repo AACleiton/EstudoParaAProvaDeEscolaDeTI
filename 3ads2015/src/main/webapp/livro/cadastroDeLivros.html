@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Cadastro de Livros</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="angula.min.js"></script>
+    </head>
+    <body ng-controller="livroController">
+        
+
+        Titulo<input type="text" ng-model="livro.titulo"/>
+        <br/>
+        Ano<input type="text" ng-model="livro.ano"/>
+        <br/>
+        Peso<input type="text" ng-model="livro.peso"/>
+        <button type="button" ng-click="salvar()">Salvar</button>
+        <button type="button" ng-click="atualizar()">Atualizar</button>
+        
+        <table>
+            
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Titulo</th>
+                    <th>Ano</th>
+                    <th>Peso</th>
+                    <th>Opções</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="l in livros">
+                    
+                    <td>{{l.id}}</td>
+                    <td>{{l.titulo}}</td>
+                    <td>{{l.ano}}</td>
+                    <td>{{l.peso}}</td>
+                    <td>
+                        <a href="#" ng-click="excluir(l)">Excluir</a>
+                        <a href="#" ng-click="alterar(l)">Alterar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
+
+
+<script>
+    
+    module = angular.module("App", []);
+    
+    module.controller("PaisController", ["$scope","$http", function($scope,$http){
+            
+            function novo(){
+                $scope.livro = {
+                    id : "",
+                    titulo : "",
+                    ano : "",
+                    peso : ""
+                };
+                $scope.isNovo = true;
+            }
+            
+            novo();
+            
+            $scope.salvar = function(){
+                if($scope.isNovo){
+                    $http.post("/livros", $scope.pais).sucess(function(){
+                        alert("Livro cadastrado!");
+                        $scope.atualizar();
+                        novo();
+                    }).erro(deuErro());
+                }else{
+                    $http.put("/livros/" + $scope.livro.id, $scope.livro).sucess(function(){
+                        alert("Dados deste livro alterado!");
+                        $scope.atualizar();
+                        novo();
+                    }).erro(deuErro())
+                }
+            };
+            
+            $scope.atualizar = function(){
+                $http.get("/livros")
+                        .success(function (data){
+                            $scope.livros = data;
+                        }).error(deuErro);
+            };
+            
+            $scope.excluir = function(livro) {
+                $http.delete("/livros/" + livro.id)
+                        .success(function(){
+                            alert("Excluido!");
+                            $scope.atualizar();
+                        }).error(deuErro);
+            };
+            
+            $scope.alterar = function(livro) {
+                $scope.livro = angular.copy(livro);
+                $scope.isNovo = false;
+            };
+            
+            function deuErro() {
+                alert("Erro!!!");
+            }
+    }])
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
