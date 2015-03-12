@@ -1,0 +1,65 @@
+<html ng-app="App">
+    <head>
+        <title>Livro</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="angular.min.js"></script>
+        <script src="livroApp.js"></script>
+    </head>
+    <body ng-controller="LivroController">
+        Codigo
+        <input type="text" ng-model="livro.id">
+        <br>
+        Titulo
+        <input type="text" ng-model="livro.titulo">
+        <br>
+        Ano
+        <input type="text" ng-model="livro.ano">
+        <br>
+        Peso
+        <input type="text" ng-model="livro.peso">
+        <br>
+        <button type="button" ng-click="salvar()">Salvar</button>
+        
+        <button type="button" ng-click="atualizar()">Atualizar</button>
+        
+        <table border="3">
+            
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Titulo
+                    </th>
+                    <th>
+                        Ano
+                    </th>
+                    <th>
+                        Peso
+                    </th>
+                    <th>
+                        Opções
+                    </th>
+                </tr>
+                
+            </thead>
+            
+            <tbody>
+                <tr ng-repeat="l in livros">
+                    <td>{{l.id}}</td>
+                    <td>{{l.titulo}}</td>
+                    <td>{{l.ano}}</td>
+                    <td>{{l.peso}}</td>
+                    <td>
+                        <a href="#" ng-click="excluir(l)">Excluir</a>
+                        <a href="#" ng-click="alterar(l)">Alterar</a>
+                    </td>
+                </tr>
+            </tbody>
+            
+        </table>
+        
+    </body>
+</html>

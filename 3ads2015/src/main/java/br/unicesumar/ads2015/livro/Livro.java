@@ -11,20 +11,12 @@ import javax.persistence.Id;
 public class Livro implements Serializable{
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titulo;
     private Integer ano;
     private Double peso;
 
     public Livro() {
-    }
-
-    public Livro(String titulo, Integer ano, Double peso) {
-        
-        this.titulo = titulo;
-        this.ano = ano;
-        this.peso = peso;
     }
 
     public Livro(Long id, String titulo, Integer ano, Double peso) {

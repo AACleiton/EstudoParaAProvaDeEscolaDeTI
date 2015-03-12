@@ -1,6 +1,8 @@
 package br.unicesumar.ads2015.livro;
 
 import br.unicesumar.ads2015.cor.MapRowMapper;
+import ch.qos.logback.classic.util.ContextInitializer;
+import com.sun.org.apache.xalan.internal.xsltc.runtime.BasisLibrary;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -36,15 +38,44 @@ public class LivroController {
     }
     
     @RequestMapping(method = RequestMethod.POST)
-    public void setLivro(@RequestParam String titulo, @RequestParam Integer ano, @RequestParam Double peso){
-        Livro l = new Livro(titulo,ano,peso);
+    public void setLivro(@RequestParam String id, @RequestParam String titulo, @RequestParam String ano, @RequestParam String peso){
+        Double pesoAux = null;
+        Integer anoAux = null;
+        Long idAux = null;
+        
+        try {
+            idAux = Long.parseLong(id);
+            anoAux = Integer.parseInt(ano);
+            pesoAux = Double.parseDouble(peso);
+        } catch (Exception e) {
+            System.out.println("Id, Ano ou peso estao com valores errados!!");
+            e.printStackTrace();
+        }
+        
+        
+        Livro l = new Livro(idAux,titulo,anoAux,pesoAux);
         persistence.persist(l);
     }
     
     @RequestMapping(value="/{id}", method= RequestMethod.PUT)
     public void alteraLivro(@PathVariable Long id, @RequestBody Livro l){
+        Double pesoAux = null;
+        Integer anoAux = null;
+        Long idAux = null;
+        
+        try {
+            idAux = l.getId();
+            anoAux = l.getAno();
+            pesoAux = l.getPeso();
+        } catch (Exception e) {
+            System.out.println("Id, Ano ou peso estao com valores errados!!");
+            e.printStackTrace();
+        }
+        
         persistence.createQuery("delete from Livro l where l.id = :id").setParameter("id", id).executeUpdate();
-        Livro livroAlterado = new Livro(id,l.getTitulo(),l.getAno(),l.getPeso());
+        
+        
+        Livro livroAlterado = new Livro(idAux,l.getTitulo(),anoAux,pesoAux);
         persistence.persist(livroAlterado);
     }
     
