@@ -8,7 +8,13 @@ module.controller("LivroController", ["$scope","$http", function($scope,$http){
         $scope.excluir = funcDeletar;
         
         $scope.livros = [];
-        $scope.livro = {};
+        $scope.livro = {
+            id : " ",
+            titulo : " ",
+            ano : " ",
+            peso : " "
+            
+        };
         $scope.isNovo =  true;
         
         funcAtualizar();
@@ -43,12 +49,12 @@ module.controller("LivroController", ["$scope","$http", function($scope,$http){
         
         function funcSalvar(){
             if($scope.isNovo){
-                $http.post("/livros",$scope.livro).success(sucesso).error(erro);
+                $http.post("/livros/salvar",$scope.livro).success(sucesso).error(erro);
                 
                 $scope.livro = {};
             }
             else{
-                $http.put("/livros" + $scope.livro.id).success(sucesso).error(erro);
+                $http.put("/livros/" + $scope.livro.id, $scope.livro).success(sucesso).error(erro);
                 funcAtualizar();
             }
         }

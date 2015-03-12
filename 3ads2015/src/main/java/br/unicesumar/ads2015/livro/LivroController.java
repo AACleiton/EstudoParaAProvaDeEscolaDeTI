@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -56,9 +57,8 @@ public class LivroController {
         Livro l = new Livro(idAux,titulo,anoAux,pesoAux);
         persistence.persist(l);
     }
-    
-    @RequestMapping(value="/{id}", method= RequestMethod.PUT)
-    public void alteraLivro(@PathVariable Long id, @RequestBody Livro l){
+    @RequestMapping(value="/salvar", method = RequestMethod.POST)
+    public void setLivro(@RequestBody Livro l){
         Double pesoAux = null;
         Integer anoAux = null;
         Long idAux = null;
@@ -72,11 +72,15 @@ public class LivroController {
             e.printStackTrace();
         }
         
-        persistence.createQuery("delete from Livro l where l.id = :id").setParameter("id", id).executeUpdate();
         
-        
-        Livro livroAlterado = new Livro(idAux,l.getTitulo(),anoAux,pesoAux);
-        persistence.persist(livroAlterado);
+        Livro livroNovo = new Livro(idAux,l.getTitulo(),anoAux,pesoAux);
+        persistence.persist(livroNovo);
+    }
+    
+    @RequestMapping(value="/{id}", method= RequestMethod.PUT)
+    public void alteraLivro(@PathVariable Long id, @RequestBody Livro l){
+        this.removerLivro(id);
+        persistence.persist(l);
     }
     
     @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
