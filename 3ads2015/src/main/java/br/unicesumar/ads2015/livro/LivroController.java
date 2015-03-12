@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,14 +42,14 @@ public class LivroController {
     }
     
     @RequestMapping(value="/{id}", method= RequestMethod.PUT)
-    public void alteraLivro(@RequestParam Long id, @RequestBody Livro l){
+    public void alteraLivro(@PathVariable Long id, @RequestBody Livro l){
         persistence.createQuery("delete from Livro l where l.id = :id").setParameter("id", id).executeUpdate();
         Livro livroAlterado = new Livro(id,l.getTitulo(),l.getAno(),l.getPeso());
         persistence.persist(livroAlterado);
     }
     
     @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-    public void removerLivro(@RequestParam Long id){
+    public void removerLivro(@PathVariable Long id){
         persistence.createQuery("delete from Livro c where c.id = :id").setParameter("id", id).executeUpdate();
     }
 }
